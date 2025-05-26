@@ -12,7 +12,16 @@ export const postEnquiry=async (req,res)=>{
       ResearchField,
       Message,
     } = req.body;
-
+console.log({
+      FullName,
+      CountryCode,
+      PhoneNumber,
+      Email,
+      Subject,
+      State,
+      ResearchField,
+      Message,
+    } )
     const enquiry = new Enquiry({
       fullName: FullName,
       countryCode: CountryCode,
