@@ -1,7 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import connectDb from './config/connectDb.js'
+import connectDb from './config/ConnectDb.js'
 import cookieParser from 'cookie-parser'
 
 
@@ -21,6 +21,6 @@ app.use('/api/enquiry',EnquiryRouter)
 const PORT=process.env.PORT
 
 app.listen(PORT,()=>{
-    //  connectDb()
+    
 console.log("App is running on port",PORT)
 })
