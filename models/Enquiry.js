@@ -8,6 +8,10 @@ const EnquiryModel=new mongoose.Schema({
   state: String,
   researchField: String,
   message: String,
+  processed:{
+    type:Boolean,
+    default:false
+  },
   createdAt: {
     type: Date,
     default: Date.now,
