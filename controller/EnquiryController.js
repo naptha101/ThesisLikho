@@ -48,6 +48,10 @@ export const getEnquiry = async (req, res) => {
    const page=req.query.p||1;
    const limit=req.query.limit||10;
    const skip=(page-1)*limit;
+   const processed=await Enquiry.find({
+    processed:true
+   }).countDocuments();
+   const unprocessed=total-processed;
    const enquiry=await Enquiry.find().sort({
     createdAt: -1
    }).skip(skip).limit(limit)
@@ -58,6 +62,8 @@ export const getEnquiry = async (req, res) => {
       currentPage: page,
       totalPages: Math.ceil(total / limit),
       totalItems: total,
+      processed:processed,
+      unprocessed:unprocessed,
       data: enquiry,
     });
   } catch (err) {
@@ -80,8 +86,9 @@ export const updateEnquiry=async(req,res)=>
     {
         try {
           const {id}=req.params;
+          const dat=await Enquiry.findById(id);
           const enquiry=await Enquiry.findByIdAndUpdate(id,{
-            processed:true
+            processed:!dat.processed
           },{new:true})
           if(!enquiry){
             return res.status(404).json({success:false,message:'Enquiry not found'})
@@ -99,6 +106,7 @@ export const DeleteEnquiry=async(req,res)=>{
     try {
         const {id}=req.params;
         const enquiry=await Enquiry.findByIdAndDelete(id)
+        console.log(enquiry)
         if(!enquiry){
             return res.status(404).json({success:false,message:'Enquiry not found'})
             }
@@ -163,4 +171,22 @@ export const getUnprocessedEnquiry=async(req,res)=>{
             console.error('Error fetching enquiry by status:', err.message);
             res.status(500).json({ success: false, message: 'Server Error' });
             }
+}
+export const searchEnquiryByName=async(req,res)=>{
+  try{
+    const name=req.query.name||'';
+        const regex = new RegExp('^' + name, 'i');
+    const data=await Enquiry.find({fullName:{$regex:regex}})
+
+    return res.status(200).json({
+      success: true,
+      data: data
+  
+    })
+
+  }
+  catch(err){
+    console.error('Error fetching enquiry by name:', err.message);
+    res.status(500).json({ success: false, message: 'Server Error' });
+  }
 }
