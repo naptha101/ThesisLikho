@@ -19,7 +19,6 @@ default:"pending"
   callBackDate:{
     type:Date,
     default:Date.now
-
   },
 comment:{
   type:String,
@@ -38,8 +37,10 @@ contacted:{
   }
 },
 confirmation:{
-  type:Boolean,
-  default:false,
+  done:{
+    type:Boolean,
+    default:false
+  },
   payment:{
     deadline:{
       type:Date,

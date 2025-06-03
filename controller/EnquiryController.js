@@ -31,6 +31,7 @@ console.log({
       state: State,
       researchField: ResearchField,
       message: Message,
+
     });
 
     await enquiry.save();
@@ -189,4 +190,30 @@ export const searchEnquiryByName=async(req,res)=>{
     console.error('Error fetching enquiry by name:', err.message);
     res.status(500).json({ success: false, message: 'Server Error' });
   }
+}
+export const remarkUpdate=async(req,res)=>{
+  try{
+    const id=req.params.id;
+    const {comment,status,callBackDate,contacted}=req.body;
+    const enquiry=await Enquiry.findById(id);
+    if(!enquiry){
+      return res.status(404).json({success:false,message:'Enquiry not found'})
+      }
+      enquiry.status=status||"pending";
+      enquiry.comment=comment||"no comment";
+      enquiry.callBackDate=callBackDate||false;
+      enquiry.contacted.whatsapp=contacted.whatsapp||false;
+      enquiry.contacted.email=contacted.email||false;
+      enquiry.contacted.phone=contacted.phone||false;
+      await enquiry.save();
+      return res.status(200).json({
+        success: true,
+        message: 'Enquiry updated successfully',
+        });
+
+    }
+    catch(err){
+      console.error('Error updating enquiry remark:', err.message);
+      res.status(500).json({ success: false, message: 'Server Error' });
+    }
 }

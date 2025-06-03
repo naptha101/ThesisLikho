@@ -1,5 +1,5 @@
 import Express from 'express'
-import { DeleteEnquiry, getEnquiry, getEnquiryById, getProcessedEnquiry, getUnprocessedEnquiry, postEnquiry, searchEnquiryByName, updateEnquiry } from '../controller/EnquiryController.js'
+import { DeleteEnquiry, getEnquiry, getEnquiryById, getProcessedEnquiry, getUnprocessedEnquiry, postEnquiry, remarkUpdate, searchEnquiryByName, updateEnquiry } from '../controller/EnquiryController.js'
 const EnquiryRouter=Express.Router()
 
 EnquiryRouter.post('/post',postEnquiry)
@@ -10,4 +10,6 @@ EnquiryRouter.delete('/delete/:id',DeleteEnquiry)
 EnquiryRouter.get('/processed',getProcessedEnquiry)
 EnquiryRouter.get('/unprocessed',getUnprocessedEnquiry)
 EnquiryRouter.get('/search',searchEnquiryByName)
+EnquiryRouter.put('/remark/:id',remarkUpdate)
+
 export default EnquiryRouter
