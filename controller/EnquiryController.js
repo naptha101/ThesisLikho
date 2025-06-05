@@ -157,6 +157,7 @@ export const getUnprocessedEnquiry=async(req,res)=>{
     const enquiry=await Enquiry.find({processed:false}).sort({
     createdAt: -1
    }).skip(skip).limit(limit)
+
     if(!enquiry){
         return res.status(404).json({success:false,message:'Enquiry not found'})
         }
@@ -199,6 +200,8 @@ export const remarkUpdate=async(req,res)=>{
     if(!enquiry){
       return res.status(404).json({success:false,message:'Enquiry not found'})
       }
+
+
       enquiry.status=status||"pending";
       enquiry.comment=comment||"no comment";
       enquiry.callBackDate=callBackDate||false;
@@ -217,3 +220,71 @@ export const remarkUpdate=async(req,res)=>{
       res.status(500).json({ success: false, message: 'Server Error' });
     }
 }
+export const confirmationUpdate=async(req,res)=>{
+  try{
+    const id=req.params.id;
+    const {done,deadline,totalAmount,priceQuoted,paidAmount,remainingAmount,transactionId,transactionType}=req.body;
+    const enquiry=await Enquiry.findById(id);
+    if(!enquiry){
+      return res.status(404).json({success:false,message:'Enquiry not found'})
+      }
+    
+      enquiry.confirmation.done=done;
+      enquiry.confirmation.payment.deadline=deadline;
+      enquiry.confirmation.payment.amount=totalAmount||0;
+      enquiry.confirmation.payment.priceQuoted=priceQuoted||0;
+      enquiry.confirmation.payment.payedAmount=paidAmount||0;
+      enquiry.confirmation.payment.remainingAmount=remainingAmount||0;
+      enquiry.confirmation.payment.transactionId=transactionId||""
+      enquiry.confirmation.payment.transactionType=transactionType||""
+
+      await enquiry.save();
+return res.status(200).json({
+  success: true,
+  message: 'Enquiry updated successfully',
+  });
+
+}
+catch(err) {
+  console.error('Error updating enquiry confirmation:', err.message);
+  res.status(500).json({ success: false, message: 'Server Error' });
+}
+}
+export const getServicesCounts = async (req, res) => {
+  try {
+    const serviceLabels = [
+      "Thesis Writing",
+      "Proofreading & Formatting",
+      "Research Article Writing",
+      "Plagiarism Checker",
+      "Literature Review & Thesis Analysis",
+      "Methodology Assist",
+      "PhD Data Analysis",
+      "Dissertation Assistance"
+    ];
+
+    const counts =[];
+
+    for (const service of serviceLabels) {
+      const count = await Enquiry.countDocuments({ researchField: service });
+      counts.push({
+        label: service,
+        count: count
+      })
+      //counts[serice] = count;
+    }
+
+    return res.status(200).json({
+      success: true,
+      counts,
+    });
+
+  } catch (error) {
+    console.error("Error getting service counts:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+

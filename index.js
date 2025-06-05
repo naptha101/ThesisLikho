@@ -7,8 +7,8 @@ import cookieParser from 'cookie-parser'
 
 const app=express()
 app.use(cors({
-  origin: ['http://localhost:4200','https://thesislikho.com'], // ✅ Replace with your frontend's actual URL
-  credentials: true                 // ✅ Allow cookies/authorization headers
+  origin: ['http://localhost:4200','https://thesislikho.com'], 
+  credentials: true               
 }));
 app.use(express.urlencoded({ extended: true })); // add this
 

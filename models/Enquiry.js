@@ -58,9 +58,17 @@ confirmation:{
       type:Number,
       default:0
     },
-    remainingAmont:{
+    remainingAmount:{
       type:Number,
       default:0
+    },
+    transactionType:{
+      type:String,
+      default:""
+    },
+    transactionId:{
+      type:String,
+      default:""
     }
   }
 },
